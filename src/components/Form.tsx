@@ -1,13 +1,20 @@
-import { useState, ChangeEvent, useMemo, FormEvent } from "react"
+import { useState, ChangeEvent, useMemo, FormEvent, Dispatch } from "react"
 import { categories } from "../data/categories"
+import { ActivityActions } from "../reducers/activity-reducer";
 
-export default function Form() {
+type FormProps = {
+    dispatch: Dispatch<ActivityActions>
+}
 
-    const [activity, setActivity] = useState<Activity>({
-        category: 1,
-        name: '',
-        calories: 0
-    });
+const initialState = {
+    category: 1,
+    name: '',
+    calories: 0
+}
+
+export default function Form({ dispatch }: FormProps) {
+
+    const [activity, setActivity] = useState<Activity>(initialState);
 
     const validateInputText = useMemo(() => {
         return activity.category === 1 ? 'Guardar Comida' : 'Guardar Ejercicio'
@@ -30,7 +37,12 @@ export default function Form() {
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        //Todo: save activity
+
+        dispatch({
+            type: 'save-activity',
+            payload: { newActivity: activity }
+        });
+        setActivity(initialState);
     }
 
     return (
