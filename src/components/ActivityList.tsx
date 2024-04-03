@@ -1,12 +1,14 @@
-import { useMemo } from "react"
+import { useMemo, Dispatch } from "react"
 import { categories } from "../data/categories"
 import { PencilSquareIcon } from '@heroicons/react/24/outline'
+import { ActivityActions } from "../reducers/activity-reducer"
 
 type ActivityListProps = {
-    activities: Activity[]
+    activities: Activity[],
+    dispatch: Dispatch<ActivityActions>
 }
 
-export default function ActivityList({ activities }: ActivityListProps) {
+export default function ActivityList({ activities, dispatch }: ActivityListProps) {
 
     const categoryName = useMemo(() =>
 
@@ -37,6 +39,11 @@ export default function ActivityList({ activities }: ActivityListProps) {
                     <div className="flex gax-x-5 items-center">
                         <button
                             type="button"
+                            onClick={() => dispatch({
+                                type: 'set-activeId',
+                                payload: { id: activity.id }
+                            }
+                            )}
                         >
                             <PencilSquareIcon
                                 className="h-8 w-8 text-gray-800"
