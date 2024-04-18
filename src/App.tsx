@@ -1,8 +1,8 @@
-import { useReducer, useEffect, useMemo } from "react"
-import Form from "./components/Form"
+import { useReducer, useEffect, useMemo } from "react";
+import Form from "./components/Form";
 import ActivityList from "./components/ActivityList";
 import CalorieTracker from "./components/CalorieTracker";
-import { activityReducer, initialState } from "./reducers/activity-reducer"
+import { activityReducer, initialState } from "./reducers/activity-reducer";
 
 function App() {
 
@@ -57,7 +57,7 @@ function App() {
         />
       </section>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
