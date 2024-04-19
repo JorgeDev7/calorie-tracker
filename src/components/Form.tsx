@@ -1,35 +1,31 @@
-import { useState, ChangeEvent, useMemo, FormEvent, Dispatch, useEffect } from "react"
-import { v4 as uuid } from 'uuid'
+import { useState, ChangeEvent, useMemo, FormEvent, useEffect } from "react";
+import { v4 as uuid } from 'uuid';
 
-import { categories } from "../data/categories"
-import { ActivityActions, ActivityState } from "../reducers/activity-reducer";
-
-type FormProps = {
-    dispatch: Dispatch<ActivityActions>
-    state: ActivityState
-}
+import { categories } from "../data/categories";
+import { useActivity } from "../hooks/useActivity";
 
 const initialState = {
     id: uuid(),
     category: 1,
     name: '',
     calories: 0
-}
+};
 
-export default function Form({ dispatch, state }: FormProps) {
+export default function Form() {
 
+    const { state, dispatch } = useActivity();
     const [activity, setActivity] = useState<Activity>(initialState);
 
     useEffect(() => {
         if (state.activeId) {
-            const selectedActivity = state.activities.filter(stateActivity => stateActivity.id === state.activeId)[0]
-            setActivity(selectedActivity)
+            const selectedActivity = state.activities.filter(stateActivity => stateActivity.id === state.activeId)[0];
+            setActivity(selectedActivity);
         }
     }, [state.activeId]);
 
     const validateInputText = useMemo(() => {
-        return activity.category === 1 ? 'Guardar Comida' : 'Guardar Ejercicio'
-    }, [activity.category])
+        return activity.category === 1 ? 'Guardar Comida' : 'Guardar Ejercicio';
+    }, [activity.category]);
 
     const handleChangeSelect = (e: ChangeEvent<HTMLSelectElement> | ChangeEvent<HTMLInputElement>) => {
         const isNumberField = ['category', 'calories'].includes(e.target.id);
@@ -37,14 +33,14 @@ export default function Form({ dispatch, state }: FormProps) {
         setActivity({
             ...activity,
             [e.target.id]: isNumberField ? +e.target.value : e.target.value
-        })
-    }
+        });
+    };
 
     const isValidActivity = () => {
         const { name, calories } = activity;
 
         return name.trim() !== "" && calories > 0;
-    }
+    };
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -57,7 +53,7 @@ export default function Form({ dispatch, state }: FormProps) {
             ...initialState,
             id: crypto.randomUUID()
         });
-    }
+    };
 
     return (
         <form
@@ -125,5 +121,5 @@ export default function Form({ dispatch, state }: FormProps) {
                 disabled={!isValidActivity() ? true : false}
             />
         </form>
-    )
+    );
 }
